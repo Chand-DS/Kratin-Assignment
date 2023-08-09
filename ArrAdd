@@ -1,0 +1,58 @@
+public class ArrayAdditionI {
+
+    public static void main(String[] args) {
+        int[] arr1 = {5, 7, 16, 1, 2};
+        System.out.println(ArrayAdditionI(arr1)); // Output: false
+
+        int[] arr2 = {3, 5, -1, 8, 12};
+        System.out.println(ArrayAdditionI(arr2)); // Output: true
+    }
+
+    public static boolean ArrayAdditionI(int[] arr) {
+        int maxValue = 0;
+        int sum = 0;
+
+        // Find the largest number in the array
+        for (int num : arr) {
+            if (num > maxValue) {
+                maxValue = num;
+            }
+        }
+
+        // Calculate the sum of all numbers except the largest
+        for (int num : arr) {
+            if (num != maxValue) {
+                sum += num;
+            }
+        }
+
+        // Check if the sum of other numbers can be equal to the largest number
+        if (sum >= maxValue) {
+            // Check if sum is even and if it is possible to create sum/2 using other numbers
+            if (sum % 2 == 0 && canCreateSum(sum / 2, arr, 0)) {
+                return true;
+            }
+            // Check if sum is odd and if it is possible to create (sum+1)/2 using other numbers
+            else if (sum % 2 != 0 && canCreateSum((sum + 1) / 2, arr, 0)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean canCreateSum(int target, int[] arr, int currentIndex) {
+        if (target == 0) {
+            return true;
+        }
+        if (currentIndex >= arr.length) {
+            return false;
+        }
+        // Include the current number in the sum
+        if (canCreateSum(target - arr[currentIndex], arr, currentIndex + 1)) {
+            return true;
+        }
+        // Exclude the current number from the sum
+        return canCreateSum(target, arr, currentIndex + 1);
+    }
+}
